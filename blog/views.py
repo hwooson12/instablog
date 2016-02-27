@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.core.paginator import Paginator
@@ -6,6 +7,7 @@ from django.core.paginator import PageNotAnInteger
 from django.core.paginator import EmptyPage
 
 from .models import Post
+from .models import Category
 
 
 def hello(request):
@@ -45,4 +47,24 @@ def view_post(request, pk):
 
     return render(request, 'view_post.html',{
         'post' : the_post,
+    })
+
+def create_post(request):
+    categories = Category.objects.all()
+    if request.method == 'GET':
+        pass
+    elif request.method == "POST":
+        new_post = Post()
+        new_post.title = request.POST.get('title')
+        new_post.content = request.POST.get('content')
+
+        category_pk = request.POST.get('category')
+        category = get_object_or_404(Category, pk=category_pk)
+        new_post.categories = category
+        new_post.save()
+
+        return redirect('view_post', pk=new_post.pk)
+
+    return render(request, 'create_post.html',{
+        'categories' : categories,
     })
