@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>글 목록</title>
+    </head>
+    <body>
+        {% for post in posts %}
+        <div class="post_container">
+            <h3><a href="{% url 'view_post' pk=post.pk %}"> {{ post.title }}</a></h3>
+
+            <div class="post_content">
+                {{ post.content }}
+            </div>
+
+            <div>
+                <p>글 갈래 : {{ post.categories.name }}</p>
+                <p>작성일시 : {{ post.created_at }}</p>
+            </div>
+        </div>
+            {% empty %}
+            <p>글이 전혀 없습니다</p>
+        {% endfor %}
+
+        {% if posts.has_previous %}
+        <span><a href="?page{{ posts.previous_page_number }}">이전 쪽</a></span>
+        {% endif %}
+
+        <span>{{ posts.number }} / {{ posts.pagination.num_pages }}</span>
+
+        {% if posts.has_next %}
+        <span><a href = "?page={{ posts.next_page_number }}">다음 쪽</a></span>
+        {% endif %}
+
+    </body>
+</html>
