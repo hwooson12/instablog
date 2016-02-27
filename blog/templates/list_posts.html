@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% extends 'blog_layout.html' %}
+{% load bootstrap3 %}
 
 {% block page_title %}글 목록{% endblock %}
 
@@ -21,13 +22,5 @@
             <p>글이 전혀 없습니다</p>
         {% endfor %}
 
-        {% if posts.has_previous %}
-        <span><a href="?page{{ posts.previous_page_number }}">이전 쪽</a></span>
-        {% endif %}
-
-        <span>{{ posts.number }} / {{ posts.pagination.num_pages }}</span>
-
-        {% if posts.has_next %}
-        <span><a href = "?page={{ posts.next_page_number }}">다음 쪽</a></span>
-        {% endif %}
+        {% bootstrap_pagination posts %}
 {% endblock %}

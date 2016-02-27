@@ -1,13 +1,12 @@
+{% extends 'blog_layout.html' %}
+{% load bootstrap3 %}
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>글 작성</title>
-</head>
-<body>
+{% block page_title %}글 편집{% endblock %}
 
-    <form method="POST" action="">
+{% block content %}
+    <form method="POST" action="" class="form-horizontal">
     {% csrf_token %}
+    <div class="form-group form-group-sm">
         <p>
             <select name="category">
                 {% for category in categories %}
@@ -24,9 +23,8 @@
         </p>
 
         <p>
-            <button type="submit">저장</button>
+            {% bootstrap_button "저장" button_type="submit" button_class="btn_primary" %}
         </p>
+    </div>
     </form>
-
-</body>
-</html>
+{%  endblock %}
