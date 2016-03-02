@@ -12,8 +12,8 @@ class Post(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    tags = models.ManyToManyField('Tag')
-    categories = models.ForeignKey(Category)
+    tags = models.ManyToManyField('Tag', blank=True)
+    categories = models.ForeignKey('Category')
 
 
     def __str__(self):

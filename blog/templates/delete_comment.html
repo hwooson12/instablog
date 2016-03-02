@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+{% extends 'blog_layout.html' %}
+{% load bootstrap3 %}
+
+{% block page_title %}댓글 삭제{% endblock %}
+{% block content %}
+    <form method="POST" action="">
+        {% csrf_token %}
+        <p>
+            정말로 지우시겠습니까?
+        </p>
+        <p>
+            {% bootstrap_button "삭제" button_type="submit" button_class="btn_primary" %}
+        </p>
+    </form>
+{% endblock %}

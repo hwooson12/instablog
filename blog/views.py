@@ -5,9 +5,11 @@ from django.http import HttpResponse
 from django.core.paginator import Paginator
 from django.core.paginator import PageNotAnInteger
 from django.core.paginator import EmptyPage
+from django.core.urlresolvers import reverse
 
 from .models import Post
 from .models import Category
+from .models import Comment
 
 
 def hello(request):
@@ -44,9 +46,20 @@ def list_posts(request):
 
 def view_post(request, pk):
     the_post = get_object_or_404(Post, pk=pk)
+    the_comment = Comment.objects.filter(post=the_post)
+
+    if request.method == 'GET':
+        pass
+    elif request.method =='POST':
+        new_comment = Comment()
+        new_comment.content = request.POST.get('content')
+        new_comment.post = the_post
+        new_comment.save()
+
 
     return render(request, 'view_post.html',{
         'post' : the_post,
+        'comments' : the_comment,
     })
 
 def create_post(request):
@@ -67,4 +80,44 @@ def create_post(request):
 
     return render(request, 'create_post.html',{
         'categories' : categories,
+
+    })
+
+def edit_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method =='GET':
+        post = get_object_or_404(Post, pk=pk)
+        categories = Category.objects.all()
+    else:
+        form = request.POST
+        category = get_object_or_404(Category, pk=form['category'])
+        post.title = form['title']
+        post.content = form['content']
+        post.category = category
+        post.save()
+        url = reverse('blog:view_post', pk=post.pk)
+        return redirect(url)
+    return render(request,'edit.html',{
+        'post':post,
+        'categories':categories,
+    })
+
+def delete_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('list_posts')
+
+    return render(request, 'delete.html',{
+        'post':post,
+    })
+
+def delete_comment(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    if request.method =='POST':
+        comment.delete()
+        return redirect('view_post', pk=comment.post.pk)
+
+    return render(request, 'delete_comment.html',{
+        'comment':comment,
     })

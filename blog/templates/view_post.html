@@ -1,23 +1,50 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>글 보기</title>
-        <meta charset="UTF-8" />
-    </head>
+{% extends 'blog_layout.html' %}
+{% load bootstrap3 %}
 
-    <body>
-        <div class="post_container">
-            <h3><a href="/posts/{{ post.pk }}/">{{ post.title }}</a></h3>
+{% block page_title %}글 보기{% endblock %}
 
-            <div class="post_content">
+{% block content %}
+    <a class="btn btn-default" href="{% url 'edit_post' pk=post.pk %}">수정하기</a>
+    <a class="btn btn-default" href="{% url 'delete_post' pk=post.pk %}">삭제하기</a>
+    <div class="post_container">
+        <h3><a href="/post/{{ post.pk }}/">{{ post.title }}</a></h3>
+
+        <div class="post_content">
                 {{ post.content }}
-            </div>
-
-            <div>
-                <p>글 갈래 : {{ post.category.name }}</p>
-                <p>작성일시 : {{ post.created_at }}</p>
-            </div>
         </div>
 
-    </body>
-</html>
+        <div>
+            <p>글 갈래 : {{ post.category.name }}</p>
+            <p>작성일시 : {{ post.created_at }}</p>
+        </div>
+    <a class="btn btn-default" href="/">글목록</a>
+    {% for comment in comments %}
+        <div class = "comment">
+            <div class="date">{{ comment.created_at }}</div>
+            <span>{{ comment.content|linebreaks }}</span>
+        </div>
+        <a class="btn btn-default" href="{% url 'delete_comment' pk=comment.pk %}">삭제</a>
+    {% empty %}
+        <p>등록된 댓글이 없습니다.</p>
+    {% endfor %}
+    </div>
+
+
+{#input comments on this post#}
+    <form method="POST" action="" class="form-horizontal">
+    {% csrf_token %}
+    <div class="form-group form-group-sm">
+        <p>
+            <label>덧글 입력</label>
+        </p>
+        <p>
+            <textarea name="content"></textarea>
+        </p>
+
+        <p>
+            {% bootstrap_button "저장" button_type="submit" button_class="btn_primary" %}
+        </p>
+    </div>
+    </form>
+{%  endblock %}
