@@ -95,8 +95,7 @@ def edit_post(request, pk):
         post.content = form['content']
         post.category = category
         post.save()
-        url = reverse('blog:view_post', pk=post.pk)
-        return redirect(url)
+        return redirect('view_post', pk=post.pk)
     return render(request,'edit.html',{
         'post':post,
         'categories':categories,

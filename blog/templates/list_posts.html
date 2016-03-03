@@ -5,6 +5,7 @@
 {% block page_title %}글 목록{% endblock %}
 
 {% block content %}
+        <a class="btn btn-default" href="{% url 'create_post' %}">글쓰기</a>
         {% for post in posts %}
         <div class="post_container">
             <h3><a href="{% url 'view_post' pk=post.pk %}"> {{ post.title }}</a></h3>
