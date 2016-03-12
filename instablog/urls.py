@@ -15,6 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.contrib.auth.views import login as django_login
+from django.contrib.auth.views import logout as django_logout
+from django.conf import settings
 
 from blog import views as blog_views
 
@@ -27,4 +30,14 @@ urlpatterns = [
     url(r'^post/(?P<pk>[0-9]+)/delete/$', blog_views.delete_post, name='delete_post'),
     url(r'^comment/(?P<pk>[0-9]+)/delete/$', blog_views.delete_comment, name='delete_comment'),
     url(r'^admin/', admin.site.urls),
+    url(r'^{}$'.format(settings.LOGIN_URL[1:]),
+        django_login,
+        {'template_name': 'login.html'},
+        name='login_url'
+        ),
+    url(r'^{}$'.format(settings.LOGOUT_URL[1:]),
+        django_logout,
+        {'next_page':settings.LOGIN_URL},
+        name='logout_url'
+        ),
 ]

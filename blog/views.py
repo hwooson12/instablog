@@ -6,10 +6,13 @@ from django.core.paginator import Paginator
 from django.core.paginator import PageNotAnInteger
 from django.core.paginator import EmptyPage
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 
 from .models import Post
 from .models import Category
 from .models import Comment
+from .forms import PostForm
+from .forms import PostEditForm
 
 
 def hello(request):
@@ -62,24 +65,32 @@ def view_post(request, pk):
         'comments' : the_comment,
     })
 
+# this pattern is often used in django.
+@login_required
 def create_post(request):
     categories = Category.objects.all()
     if request.method == 'GET':
-        pass
+        form = PostEditForm()
     elif request.method == "POST":
-        new_post = Post()
-        new_post.title = request.POST.get('title')
-        new_post.content = request.POST.get('content')
+        form = PostEditForm(request.POST)
+        if form.is_valid():
+            new_post = form.save(commit=False)
+            new_post.user = request.user
+            new_post.save()
+            # new_post = Post()
+            # new_post.title = form.cleaned_data['title']
+            # new_post.content = form.cleaned_data['content']
+            #
+            # category_pk = request.POST.get('category')
+            # category = get_object_or_404(Category, pk=category_pk)
+            # new_post.categories = category
+            # new_post.save()
 
-        category_pk = request.POST.get('category')
-        category = get_object_or_404(Category, pk=category_pk)
-        new_post.categories = category
-        new_post.save()
-
-        return redirect('view_post', pk=new_post.pk)
+            return redirect('view_post', pk=new_post.pk)
 
     return render(request, 'create_post.html',{
         'categories' : categories,
+        'form' : form,
 
     })
 
@@ -100,6 +111,7 @@ def edit_post(request, pk):
         'post':post,
         'categories':categories,
     })
+
 
 def delete_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
