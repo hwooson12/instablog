@@ -7,6 +7,7 @@ from django.core.paginator import PageNotAnInteger
 from django.core.paginator import EmptyPage
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import PermissionDenied
 
 from .models import Post
 from .models import Category
@@ -112,9 +113,11 @@ def edit_post(request, pk):
         'categories':categories,
     })
 
-
+@login_required
 def delete_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    if post.user != request.user:
+        raise PermissionDenied
     if request.method == 'POST':
         post.delete()
         return redirect('list_posts')
@@ -122,7 +125,7 @@ def delete_post(request, pk):
     return render(request, 'delete.html',{
         'post':post,
     })
-
+@login_required
 def delete_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     if request.method =='POST':

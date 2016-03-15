@@ -107,7 +107,7 @@ class PostTest(TestCase):
         """로그인 상태에서 뷰 함수를 이용해 게시물을 게시하는 테스트.
         """
         _form_data = {
-            'category': self.category.pk,
+            'categories': self.category.pk,
             'title': 'Sjfdlkja23@#$!@SDF title',
             'content': 'FSAD@3@#$!sdflkj content',
         }
@@ -115,7 +115,7 @@ class PostTest(TestCase):
         # 게시물 게시 시도.
         response = self._add_post(_form_data)
         # 가장 마지막에 등록된 게시물 데이터를 가져온다.
-        latest_post = models.Post.objects.latest('pk') # 에러 원인 파악하기
+        latest_post = models.Post.objects.latest('pk')
         # 게시물 게시 후 해당 개별 게시물을 보는 URL로 redirect 했는지 확인.
         _view_post_url = self.urls.view_post(latest_post.pk)
         self.assertEqual(
@@ -141,7 +141,7 @@ class PostTest(TestCase):
             _form_data['title']
         )
 
-    @unittest.skip('이 장식자를 제거하며 하나씩 테스트를 통과하세요')
+    # @unittest.skip('이 장식자를 제거하며 하나씩 테스트를 통과하세요')
     def test_create_post_for_form_errors(self):
         """뷰 함수를 이용해 게시물을 게시하는 테스트 중 필수 입력 폼 테스트.
         """
@@ -158,12 +158,12 @@ class PostTest(TestCase):
 
         # 필수 입력 항목인 title, content 빠뜨리고 게시물 게시 시도.
         _form_data = {}
-        _form_data['category'] = self.category.pk,
+        _form_data['categories'] = self.category.pk,
         response = self._add_post(_form_data)
         # 게시에 사용한 폼 인스턴스 객체가 템플릿 컨텍스트에 있는지 테스트.
         self.assertIn('form', response.context)
         # 템플릿 변수인 form에 필수 폼 필드에 대해 오류가 있는지 테스트.
-        self.assertFalse(response.context['form'].has_error('category'))
+        self.assertFalse(response.context['form'].has_error('categories'))
         self.assertTrue(response.context['form'].has_error('title'))
         self.assertTrue(response.context['form'].has_error('content'))
 
@@ -173,7 +173,7 @@ class PostTest(TestCase):
         # 게시에 사용한 폼 인스턴스 객체가 템플릿 컨텍스트에 있는지 테스트.
         self.assertIn('form', response.context)
         # 템플릿 변수인 form에 필수 폼 필드에 대해 오류가 있는지 테스트.
-        self.assertFalse(response.context['form'].has_error('category'))
+        self.assertFalse(response.context['form'].has_error('categories'))
         self.assertFalse(response.context['form'].has_error('title'))
         self.assertTrue(response.context['form'].has_error('content'))
 
@@ -193,12 +193,12 @@ class PostTest(TestCase):
         # http status가 404인지 확인.
         self.assertEqual(response.status_code, 404)
 
-    @unittest.skip('이 장식자를 제거하며 하나씩 테스트를 통과하세요')
+    # @unittest.skip('이 장식자를 제거하며 하나씩 테스트를 통과하세요')
     def test_delete_post_on_logout(self):
         """로그아웃 상태에서 개별 게시물을 지우는 테스트.
         """
         _form_data = {
-            'category': self.category.pk,
+            'categories': self.category.pk,
             'title': 'Sjfdlkja23@#$!@SDF title',
             'content': 'FSAD@3@#$!sdflkj content',
         }
@@ -206,7 +206,7 @@ class PostTest(TestCase):
         # 게시물 게시 시도.
         response = self._add_post(_form_data)
         self.assertIn(response.status_code, (200, 201,))
-        latest_post = models.Post.objects.latest('pk') # 에러 원인 파악하기
+        latest_post = models.Post.objects.latest('pk')
 
         # test1 로그아웃
         self.client.get(settings.LOGOUT_URL)
@@ -218,12 +218,12 @@ class PostTest(TestCase):
         # 로그인 URL로 redirect 됐는지 확인.
         self.assertEqual(response.resolver_match.func.__name__, 'login')
 
-    @unittest.skip('이 장식자를 제거하며 하나씩 테스트를 통과하세요')
+    # @unittest.skip('이 장식자를 제거하며 하나씩 테스트를 통과하세요')
     def test_delete_post_without_permm(self):
         """권한 없이 개별 게시물을 지우는 시도하는 테스트.
         """
         _form_data = {
-            'category': self.category.pk,
+            'categories': self.category.pk,
             'title': 'Sjfdlkja23@#$!@SDF title',
             'content': 'FSAD@3@#$!sdflkj content',
         }
@@ -244,12 +244,12 @@ class PostTest(TestCase):
         # 권한이 없으므로 403 status 응답해야 함.
         self.assertEqual(response.status_code, 403)
 
-    @unittest.skip('이 장식자를 제거하며 하나씩 테스트를 통과하세요')
+    # @unittest.skip('이 장식자를 제거하며 하나씩 테스트를 통과하세요')
     def test_delete_post(self):
         """개별 게시물을 지우는 테스트.
         """
         _form_data = {
-            'category': self.category.pk,
+            'categories': self.category.pk,
             'title': 'Sjfdlkja23@#$!@SDF title',
             'content': 'FSAD@3@#$!sdflkj content',
         }

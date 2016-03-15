@@ -4,9 +4,20 @@ from django.forms import ValidationError
 from .models import Post
 
 class PostForm(forms.Form):
-    title = forms.CharField(required=True, label='글제목')
-    content = forms.CharField(widget=forms.Textarea, required=True, label='내용')
-    categories = forms.CharField(required=True)
+    title = forms.CharField(
+        required=True, label='글 제목', help_text='기왕이면 성의껏...'
+    )
+    content = forms.CharField(widget=forms.Textarea)
+    categories = forms.ChoiceField(required=True)
+    def clean_title(self):
+        title = self.cleaned_data.get('title')
+        if '카지노' in title:
+            self.add_error('카지노 단어는 금지 됨')
+
+# class PostForm(forms.Form):
+#     title = forms.CharField(required=True, label='글제목')
+#     content = forms.CharField(widget=forms.Textarea, required=True, label='내용')
+
 
 class PostEditForm(forms.ModelForm):
     class Meta:
