@@ -93,7 +93,7 @@ def create_post(request):
         'form' : form,
 
     })
-
+@login_required
 def edit_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method =='GET':

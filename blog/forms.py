@@ -6,7 +6,7 @@ from .models import Post
 class PostForm(forms.Form):
     title = forms.CharField(required=True, label='글제목')
     content = forms.CharField(widget=forms.Textarea, required=True, label='내용')
-
+    categories = forms.CharField(required=True)
 
 class PostEditForm(forms.ModelForm):
     class Meta:

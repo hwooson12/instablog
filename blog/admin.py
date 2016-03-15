@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import *
 
-class CommentInlineAdmin(admin.StackedInline):
+class CommentInlineAdmin(admin.TabularInline):# difference btw Stack and Tabular
     model = Comment
     extra = 1
 
