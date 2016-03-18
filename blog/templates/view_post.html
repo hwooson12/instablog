@@ -11,14 +11,19 @@
         <h3><a href="/post/{{ post.pk }}/">{{ post.title }}</a></h3>
 
         <div class="post_content">
-                {{ post.content }}
+                {{ post.content|linebreaks }}
         </div>
 
         <div>
             <p>글 갈래 : {{ post.category.name }}</p>
             <p>작성일시 : {{ post.created_at }}</p>
         </div>
+        <div>
+            <p>{{ morph }}</p>
+        </div>
     <a class="btn btn-default" href="/">글목록</a>
+    <a class="btn btn-default" href="/post/{{ post.pk }}/learning/">학습하기</a>
+
     {% for comment in comments %}
         <div class = "comment">
             <div class="date">{{ comment.created_at }}</div>

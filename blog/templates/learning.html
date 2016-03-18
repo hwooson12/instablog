@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% extends 'blog_layout.html' %}
+{% load bootstrap3 %}
+
+{% block page_title %}학습하기{% endblock %}
+{% block content %}
+    <form method="POST" action="">
+        {% csrf_token %}
+        <p>
+            <input type="radio" name="senti" value="1">긍정
+        </p>
+        <p>
+            <input type="radio" name="senti" value="0">중립
+        </p>
+        <p>
+            <input type="radio" name="senti" value="-1">부정
+        </p>
+        <p>
+            학습하시겠습니까?
+        </p>
+        <p>
+            {% bootstrap_button "학습" button_type="submit" button_class="btn_primary" %}
+        </p>
+    </form>
+{% endblock %}

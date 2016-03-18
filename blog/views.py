@@ -9,11 +9,11 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import PermissionDenied
 
-from .models import Post
-from .models import Category
-from .models import Comment
+from .models import Post, Category, Comment, Sentiword
 from .forms import PostForm
 from .forms import PostEditForm
+
+from konlpy.tag import Mecab
 
 
 def hello(request):
@@ -28,6 +28,8 @@ def list_posts(request):
     per_page = 5
     current_page = request.GET.get('page', 1)
 
+    # when A model is related to B model and data A are gotten from B model,
+    # data on B model are come with data A.
     all_posts = Post.objects.\
         select_related().\
         prefetch_related().\
@@ -51,6 +53,11 @@ def list_posts(request):
 def view_post(request, pk):
     the_post = get_object_or_404(Post, pk=pk)
     the_comment = Comment.objects.filter(post=the_post)
+    mecab = Mecab()
+    morph = mecab.pos(the_post.content)
+    the_morph = ' '.join(str(e) for e in morph)
+
+
 
     if request.method == 'GET':
         pass
@@ -61,10 +68,38 @@ def view_post(request, pk):
         new_comment.save()
 
 
+
+
     return render(request, 'view_post.html',{
         'post' : the_post,
         'comments' : the_comment,
+        'morph' : the_morph,
     })
+
+def learning(request, pk):
+    the_post = get_object_or_404(Post, pk=pk)
+    mecab = Mecab()
+    morph = mecab.pos(the_post.content)
+
+
+    if request.method=="GET":
+        pass
+    elif request.method=="POST" and the_post.sentiword_set.exists()==False:
+        for m in range(len(morph)):
+            the_word = Sentiword()
+            the_word.word = str(morph[m])
+            the_word.post = the_post
+            the_post.senti = request.POST.get('senti')
+            the_post.save()
+            the_word.save()
+        return redirect('view_post', pk=pk)
+    else:
+        return redirect('view_post', pk=pk)
+
+    return render(request, 'learning.html',{
+        'post':the_post,
+    })
+
 
 # this pattern is often used in django.
 @login_required

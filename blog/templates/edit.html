@@ -23,7 +23,7 @@
             <label>제목</label>
             <input type="'text" name="title" value="{{ post.title }}"/>
         </p>
-        <p><textarea name="content">{{ post.content }}</textarea></p>
+        <p><textarea cols="50" rows="15" name="content">{{ post.content }}</textarea></p>
         <p>{% bootstrap_button "저장" button_type="submit" button_class="btn_primary" %}</p>
     </div>
     </form>

@@ -16,6 +16,10 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     tags = models.ManyToManyField('Tag', blank=True)
     categories = models.ForeignKey('Category', default=1)
+    senti = models.SmallIntegerField(choices=((1, 'positive'),
+                                              (0, 'neutral'),
+                                              (-1, 'negative')),
+                                     default=0)
 
 
     def __str__(self):
@@ -35,3 +39,8 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+class Sentiword(models.Model):
+    word = models.CharField(max_length=40)
+    post = models.ForeignKey(Post)
+

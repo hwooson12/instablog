@@ -10,9 +10,9 @@
         <div class="post_container">
             <h3><a href="{% url 'view_post' pk=post.pk %}"> {{ post.title }}</a></h3>
 
-            <div class="post_content">
-                {{ post.content }}
-            </div>
+{#            <div class="post_content">#}
+{#                {{ post.content }}#}
+{#            </div>#}
 
             <div>
                 <p>글 갈래 : {{ post.categories.name }}</p>

@@ -22,6 +22,7 @@ from django.conf import settings
 from blog import views as blog_views
 
 urlpatterns = [
+    url(r'^post/(?P<pk>[0-9]+)/learning/$', blog_views.learning, name='learning'),
     url(r'^post/(?P<pk>[0-9]+)/edit/$', blog_views.edit_post, name='edit_post'),
     url(r'^post/create/$', blog_views.create_post, name='create_post'),
     url(r'^$', blog_views.list_posts, name='list_posts'),
