@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '5m_&1%hoe^5m4air(v*5lt4+$$&4ld-_)-vgy@d_zw4x8e(%gu'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [*]
 
 
 # Application definition
@@ -81,8 +81,11 @@ WSGI_APPLICATION = 'instablog.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'testDB',
+        'HOST': 'http://testdb.cinljga4slfz.ap-northeast-2.rds.amazonaws.com',
+        'USER': 'hwooson12',
+        'PASSWORD': os.environ.get('INSTABLOG_DB_PW'),
     }
 }
 
