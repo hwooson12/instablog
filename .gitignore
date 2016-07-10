@@ -73,3 +73,6 @@ target/
 
 # virtual env
 hwenv/
+
+# sqlite
+db.splite3
